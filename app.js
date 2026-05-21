@@ -155,6 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Connect all inputs to live update listeners
     Object.keys(fields).forEach(key => {
         fields[key].addEventListener('input', generateAnnouncement);
+        fields[key].addEventListener('change', generateAnnouncement);
     });
 
     // Set Live Mock Timestamp
