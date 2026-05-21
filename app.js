@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         organizer: document.getElementById('toggle-organizer'),
         volunteersCount: document.getElementById('toggle-volunteersCount'),
         jobDescription: document.getElementById('toggle-jobDescription'),
+        genderRequirement: document.getElementById('toggle-genderRequirement'),
         location: document.getElementById('toggle-location'),
         eventDate: document.getElementById('toggle-eventDate'),
         eventTime: document.getElementById('toggle-eventTime'),
@@ -31,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         organizer: document.getElementById('group-organizer'),
         volunteersCount: document.getElementById('group-volunteersCount'),
         jobDescription: document.getElementById('group-jobDescription'),
+        genderRequirement: document.getElementById('group-genderRequirement'),
         location: document.getElementById('group-location'),
         eventDate: document.getElementById('group-eventDate'),
         eventTime: document.getElementById('group-eventTime'),
@@ -137,10 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (toggle.checked) {
             group.classList.remove('field-disabled');
-            input.removeAttribute('disabled');
+            if (input) input.removeAttribute('disabled');
+            group.querySelectorAll('input[type="radio"]').forEach(r => r.removeAttribute('disabled'));
         } else {
             group.classList.add('field-disabled');
-            input.setAttribute('disabled', 'true');
+            if (input) input.setAttribute('disabled', 'true');
+            group.querySelectorAll('input[type="radio"]').forEach(r => r.setAttribute('disabled', 'true'));
             // Remove validation errors if disabled
             group.classList.remove('has-error');
         }
@@ -156,6 +160,11 @@ document.addEventListener('DOMContentLoaded', () => {
     Object.keys(fields).forEach(key => {
         fields[key].addEventListener('input', generateAnnouncement);
         fields[key].addEventListener('change', generateAnnouncement);
+    });
+
+    // Connect radio buttons to live update listeners
+    document.querySelectorAll('input[name="genderRequirement"]').forEach(radio => {
+        radio.addEventListener('change', generateAnnouncement);
     });
 
     // Set Live Mock Timestamp
@@ -244,13 +253,34 @@ document.addEventListener('DOMContentLoaded', () => {
         const vCount = fields.volunteersCount.value;
         const jobDesc = fields.jobDescription.value.trim();
 
+        // Gender preference formatting
+        const genderVal = document.querySelector('input[name="genderRequirement"]:checked')?.value || 'ANY';
+        let genderText = "";
+        if (toggles.genderRequirement.checked) {
+            if (genderVal === 'ONLY BOYS') {
+                genderText = " (only boys)";
+            } else if (genderVal === 'ONLY GIRLS') {
+                genderText = " (only girls)";
+            } else {
+                genderText = " (open to all)";
+            }
+        }
+
         if (toggles.volunteersCount.checked && vCount) {
-            detailsParagraph += `🤝 We are looking for *${vCount} volunteers* to join our team. `;
+            detailsParagraph += `🤝 We are looking for *${vCount} volunteers${genderText}* to join our team. `;
             if (toggles.jobDescription.checked && jobDesc) {
                 detailsParagraph += `As a volunteer, you will be assisting with: ${jobDesc}`;
             }
         } else if (toggles.jobDescription.checked && jobDesc) {
-            detailsParagraph += `📝 *Volunteering Role:* We need support with: ${jobDesc}`;
+            detailsParagraph += `📝 *Volunteering Role${genderText}:* We need support with: ${jobDesc}`;
+        } else if (toggles.genderRequirement.checked && genderText) {
+            if (genderVal === 'ONLY BOYS') {
+                detailsParagraph += `🤝 *Eligibility:* This volunteering opportunity is open to *boys only*. `;
+            } else if (genderVal === 'ONLY GIRLS') {
+                detailsParagraph += `🤝 *Eligibility:* This volunteering opportunity is open to *girls only*. `;
+            } else {
+                detailsParagraph += `🤝 *Eligibility:* This volunteering opportunity is open to *both boys and girls*. `;
+            }
         }
 
         // Logistics Paragraph (Location, Date, Time)

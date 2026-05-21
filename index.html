@@ -109,6 +109,29 @@
                                     <textarea id="jobDescription" rows="3" placeholder="e.g., Managing the registration desk, coordinating guest seating, and assisting with stage setups."></textarea>
                                 </div>
                             </div>
+
+                            <!-- Gender Preference -->
+                            <div class="form-group" id="group-genderRequirement">
+                                <div class="label-row">
+                                    <label>Gender Preference</label>
+                                    <label class="switch">
+                                        <input type="checkbox" id="toggle-genderRequirement" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="segmented-control-wrapper">
+                                    <div class="segmented-control">
+                                        <input type="radio" id="gender-any" name="genderRequirement" value="ANY" checked>
+                                        <label for="gender-any">Any</label>
+                                        
+                                        <input type="radio" id="gender-boys" name="genderRequirement" value="ONLY BOYS">
+                                        <label for="gender-boys">Only Boys</label>
+                                        
+                                        <input type="radio" id="gender-girls" name="genderRequirement" value="ONLY GIRLS">
+                                        <label for="gender-girls">Only Girls</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

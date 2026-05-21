@@ -721,3 +721,49 @@ input:checked + .slider:before {
         gap: 1rem;
     }
 }
+
+/* Segmented Control for Gender Selection */
+.segmented-control-wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.segmented-control {
+    display: flex;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    width: 100%;
+    padding: 4px;
+    user-select: none;
+}
+
+.segmented-control input[type="radio"] {
+    display: none;
+}
+
+.segmented-control label {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition-smooth);
+    margin: 0;
+}
+
+.segmented-control input[type="radio"]:checked + label {
+    color: #0b141a;
+    background-color: var(--primary);
+    font-weight: 600;
+}
+
+.form-group.field-disabled .segmented-control {
+    pointer-events: none;
+    opacity: 0.5;
+}
