@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Announcement Generator - WhatsApp Ready</title>
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i data-lucide="party-popper"></i>
+                </div>
+                <div>
+                    <h1>Event Announcement Generator</h1>
+                    <p class="subtitle">Craft beautiful, WhatsApp-ready event invites in seconds</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="app-main">
+            <!-- Left Panel: Input Fields -->
+            <section class="input-panel">
+                <form id="announcementForm" onsubmit="event.preventDefault();">
+                    
+                    <!-- Card 1: Event Basics -->
+                    <div class="card" id="card-basics">
+                        <div class="card-header">
+                            <i data-lucide="info" class="card-icon"></i>
+                            <h2>Event Basics</h2>
+                        </div>
+                        <div class="card-body">
+                            <!-- Event Name -->
+                            <div class="form-group" id="group-eventName">
+                                <div class="label-row">
+                                    <label for="eventName">Event Name <span class="required-star">*</span></label>
+                                    <label class="switch">
+                                        <input type="checkbox" id="toggle-eventName" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="input-wrapper">
+                                    <i data-lucide="sparkles" class="input-icon"></i>
+                                    <input type="text" id="eventName" placeholder="e.g., Annual Tech Symposium 2026" required>
+                                </div>
+                                <span class="error-msg" id="error-eventName">Event Name is required when enabled.</span>
+                            </div>
+
+                            <!-- Organizers -->
+                            <div class="form-group" id="group-organizer">
+                                <div class="label-row">
+                                    <label for="organizer">Organizers</label>
+                                    <label class="switch">
+                                        <input type="checkbox" id="toggle-organizer" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="input-wrapper">
+                                    <i data-lucide="users" class="input-icon"></i>
+                                    <input type="text" id="organizer" placeholder="e.g., Department of Computer Science">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Requirements -->
+                    <div class="card" id="card-requirements">
+                        <div class="card-header">
+                            <i data-lucide="award" class="card-icon"></i>
+                            <h2>Volunteering Details</h2>
+                        </div>
+                        <div class="card-body">
+                            <!-- Volunteers Count -->
+                            <div class="form-group" id="group-volunteersCount">
+                                <div class="label-row">
+                                    <label for="volunteersCount">Volunteers Required</label>
+                                    <label class="switch">
+                                        <input type="checkbox" id="toggle-volunteersCount" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="input-wrapper">
+                                    <i data-lucide="user-plus" class="input-icon"></i>
+                                    <input type="number" id="volunteersCount" min="1" placeholder="e.g., 15">
+                                </div>
+                            </div>
+
+                            <!-- Job Description -->
+                            <div class="form-group" id="group-jobDescription">
+                                <div class="label-row">
+                                    <label for="jobDescription">Job Description</label>
+                                    <label class="switch">
+                                        <input type="checkbox" id="toggle-jobDescription" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="input-wrapper">
+                                    <i data-lucide="align-left" class="input-icon text-area-icon"></i>
+                                    <textarea id="jobDescription" rows="3" placeholder="e.g., Managing the registration desk, coordinating guest seating, and assisting with stage setups."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Logistics -->
+                    <div class="card" id="card-logistics">
+                        <div class="card-header">
+                            <i data-lucide="map-pin" class="card-icon"></i>
+                            <h2>Date & Location</h2>
+                        </div>
+                        <div class="card-body">
+                            <!-- Location -->
+                            <div class="form-group" id="group-location">
+                                <div class="label-row">
+                                    <label for="location">Location</label>
+                                    <label class="switch">
+                                        <input type="checkbox" id="toggle-location" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="input-wrapper">
+                                    <i data-lucide="map" class="input-icon"></i>
+                                    <input type="text" id="location" placeholder="e.g., Main Auditorium, North Campus">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <!-- Date -->
+                                <div class="form-group" id="group-eventDate">
+                                    <div class="label-row">
+                                        <label for="eventDate">Date</label>
+                                        <label class="switch">
+                                            <input type="checkbox" id="toggle-eventDate" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="input-wrapper">
+                                        <i data-lucide="calendar" class="input-icon"></i>
+                                        <input type="date" id="eventDate">
+                                    </div>
+                                </div>
+
+                                <!-- Time -->
+                                <div class="form-group" id="group-eventTime">
+                                    <div class="label-row">
+                                        <label for="eventTime">Time</label>
+                                        <label class="switch">
+                                            <input type="checkbox" id="toggle-eventTime" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="input-wrapper">
+                                        <i data-lucide="clock" class="input-icon"></i>
+                                        <input type="time" id="eventTime">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Contact & Extra -->
+                    <div class="card" id="card-contact">
+                        <div class="card-header">
+                            <i data-lucide="phone" class="card-icon"></i>
+                            <h2>Contact & Extra Info</h2>
+                        </div>
+                        <div class="card-body">
+                            <!-- Additional Info -->
+                            <div class="form-group" id="group-additionalInfo">
+                                <div class="label-row">
+                                    <label for="additionalInfo">Additional Information</label>
+                                    <label class="switch">
+                                        <input type="checkbox" id="toggle-additionalInfo" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="input-wrapper">
+                                    <i data-lucide="plus-circle" class="input-icon text-area-icon"></i>
+                                    <textarea id="additionalInfo" rows="2" placeholder="e.g., Free lunch and certificates will be provided to all volunteers!"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- WhatsApp Number -->
+                            <div class="form-group" id="group-whatsappNumber">
+                                <div class="label-row">
+                                    <label for="whatsappNumber">Incharge WhatsApp Number <span class="required-star">*</span></label>
+                                    <label class="switch">
+                                        <input type="checkbox" id="toggle-whatsappNumber" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="input-wrapper">
+                                    <i data-lucide="phone-call" class="input-icon"></i>
+                                    <input type="tel" id="whatsappNumber" placeholder="e.g., 919876543210 (include country code)" required>
+                                </div>
+                                <span class="error-msg" id="error-whatsappNumber">Enter a valid WhatsApp number with country code (digits only, e.g. 919876543210).</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </section>
+
+            <!-- Right Panel: Previews and Actions -->
+            <section class="preview-panel">
+                
+                <!-- Live Preview Text Area -->
+                <div class="preview-card">
+                    <div class="preview-header">
+                        <div class="status-indicator">
+                            <span class="status-dot animate-pulse"></span>
+                            Live Preview
+                        </div>
+                        <button class="btn btn-secondary btn-sm" id="btn-copy-msg" title="Copy Raw Text">
+                            <i data-lucide="copy"></i> Copy Message
+                        </button>
+                    </div>
+                    <div class="preview-box-container">
+                        <div class="preview-box" id="preview-text" contenteditable="false">
+                            <!-- Pre-filled dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Simulation Bubble (WhatsApp Mock Up) -->
+                <div class="whatsapp-mock-card">
+                    <div class="wa-header">
+                        <div class="wa-avatar">
+                            <i data-lucide="user"></i>
+                        </div>
+                        <div class="wa-user-info">
+                            <div class="wa-name">Events Group</div>
+                            <div class="wa-status">online</div>
+                        </div>
+                        <div class="wa-actions">
+                            <i data-lucide="video" class="wa-header-icon"></i>
+                            <i data-lucide="phone" class="wa-header-icon"></i>
+                            <i data-lucide="more-vertical" class="wa-header-icon"></i>
+                        </div>
+                    </div>
+                    <div class="wa-chat-area">
+                        <div class="wa-chat-bubble-container">
+                            <div class="wa-bubble">
+                                <div class="wa-bubble-header">Organizer Announcements</div>
+                                <div class="wa-bubble-content" id="wa-bubble-text">
+                                    <!-- Formatted message here -->
+                                </div>
+                                <div class="wa-bubble-meta">
+                                    <span class="wa-time" id="wa-timestamp">12:00 PM</span>
+                                    <span class="wa-ticks">
+                                        <svg viewBox="0 0 16 15" width="16" height="15" fill="none"><path fill="#53bdeb" d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033L5.138 6.845a.365.365 0 0 0-.519.01l-.417.417a.366.366 0 0 0 .01.527l3.635 3.51a.32.32 0 0 0 .468-.013l6.76-7.469a.365.365 0 0 0-.063-.51zM11.39 3.29l-.477-.373a.367.367 0 0 0-.511.063L5.4 9.879a.32.32 0 0 1-.484.033L1.87 6.845a.365.365 0 0 0-.52.01l-.416.417a.365.365 0 0 0 .01.527l3.635 3.51a.32.32 0 0 0 .468-.013l6.76-7.469a.365.365 0 0 0-.063-.51z"></svg>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Generated Link Details and Actions -->
+                <div class="action-card">
+                    <h3>Share Link Settings</h3>
+                    <p class="action-description">A prefilled message will open directly in the chat with the incharge number when clicked.</p>
+                    
+                    <div class="link-display-group">
+                        <div class="link-url-box" id="whatsapp-link-text">
+                            https://wa.me/919876543210?text=Hi...
+                        </div>
+                        <button class="btn btn-icon" id="btn-copy-link" title="Copy WhatsApp Link">
+                            <i data-lucide="link"></i>
+                        </button>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn btn-primary" id="btn-open-wa">
+                            <i data-lucide="external-link"></i> Open in WhatsApp
+                        </button>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast">
+        <i data-lucide="check-circle" class="toast-icon"></i>
+        <span id="toast-message">Copied to clipboard!</span>
+    </div>
+
+    <!-- Load JavaScript -->
+    <script src="app.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
