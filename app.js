@@ -11,7 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
         eventDateTo: document.getElementById('eventDateTo'),
         eventTime: document.getElementById('eventTime'),
         additionalInfo: document.getElementById('additionalInfo'),
-        whatsappNumber: document.getElementById('whatsappNumber')
+        whatsappNumber: document.getElementById('whatsappNumber'),
+        payAmount: document.getElementById('payAmount'),
+        payAdditional: document.getElementById('payAdditional')
     };
 
     // Toggle Switches
@@ -21,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         volunteersCount: document.getElementById('toggle-volunteersCount'),
         jobDescription: document.getElementById('toggle-jobDescription'),
         genderRequirement: document.getElementById('toggle-genderRequirement'),
+        payDetails: document.getElementById('toggle-payDetails'),
         location: document.getElementById('toggle-location'),
         eventDate: document.getElementById('toggle-eventDate'),
         eventTime: document.getElementById('toggle-eventTime'),
@@ -35,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         volunteersCount: document.getElementById('group-volunteersCount'),
         jobDescription: document.getElementById('group-jobDescription'),
         genderRequirement: document.getElementById('group-genderRequirement'),
+        payDetails: document.getElementById('group-payDetails'),
         location: document.getElementById('group-location'),
         eventDate: document.getElementById('group-eventDate'),
         eventTime: document.getElementById('group-eventTime'),
@@ -415,6 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 2. Build Message Paragraph by Paragraph
         let introParagraph = "";
         let detailsParagraph = "";
+        let payParagraph = "";
         let logisticsParagraph = "";
         let additionalParagraph = "";
         let contactParagraph = "";
@@ -471,6 +476,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 detailsParagraph += `🤝 *Eligibility:* This volunteering opportunity is open to *girls only*. `;
             } else {
                 detailsParagraph += `🤝 *Eligibility:* This volunteering opportunity is open to *both boys and girls*. `;
+            }
+        }
+
+        // Pay / Compensation Paragraph
+        const payAmountVal = fields.payAmount.value.trim();
+        const payAdditionalVal = fields.payAdditional.value.trim();
+
+        if (toggles.payDetails.checked) {
+            if (payAmountVal && payAdditionalVal) {
+                payParagraph += `💰 *Compensation:* You will be paid *${payAmountVal}* for this gig, and additionally you'll receive *${payAdditionalVal}*!`;
+            } else if (payAmountVal) {
+                payParagraph += `💰 *Compensation:* You will be paid *${payAmountVal}* for this gig!`;
+            } else if (payAdditionalVal) {
+                payParagraph += `🎁 *Perks & Benefits:* While there is no direct monetary compensation, you will receive: *${payAdditionalVal}*!`;
             }
         }
 
@@ -542,6 +561,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const paragraphs = [
             introParagraph,
             detailsParagraph,
+            payParagraph,
             logisticsParagraph,
             additionalParagraph,
             contactParagraph
