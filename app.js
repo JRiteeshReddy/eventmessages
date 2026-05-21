@@ -639,6 +639,48 @@ document.addEventListener('DOMContentLoaded', () => {
         window.open(generatedLink, '_blank');
     });
 
+    // Mobile Tab Switcher Logic
+    const btnTabEdit = document.getElementById('btn-tab-edit');
+    const btnTabPreview = document.getElementById('btn-tab-preview');
+    const inputPanel = document.querySelector('.input-panel');
+    const previewPanel = document.querySelector('.preview-panel');
+
+    function switchMobileTab(activeTab) {
+        if (activeTab === 'edit') {
+            btnTabEdit.classList.add('active');
+            btnTabPreview.classList.remove('active');
+            inputPanel.classList.remove('mobile-hidden');
+            previewPanel.classList.add('mobile-hidden');
+        } else {
+            btnTabEdit.classList.remove('active');
+            btnTabPreview.classList.add('active');
+            inputPanel.classList.add('mobile-hidden');
+            previewPanel.classList.remove('mobile-hidden');
+        }
+    }
+
+    btnTabEdit.addEventListener('click', () => switchMobileTab('edit'));
+    btnTabPreview.addEventListener('click', () => switchMobileTab('preview'));
+
+    // Initialize mobile visibility state on page load
+    if (window.innerWidth <= 992) {
+        switchMobileTab('edit');
+    }
+
+    // Add resize listener to handle transitions between desktop & mobile layouts cleanly
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 992) {
+            inputPanel.classList.remove('mobile-hidden');
+            previewPanel.classList.remove('mobile-hidden');
+        } else {
+            if (btnTabEdit.classList.contains('active')) {
+                switchMobileTab('edit');
+            } else {
+                switchMobileTab('preview');
+            }
+        }
+    });
+
     // Initial message generation
     generateAnnouncement();
 });

@@ -694,6 +694,11 @@ input:checked + .slider:before {
     height: 18px;
 }
 
+/* Mobile Tab Navigation */
+.mobile-tabs-container {
+    display: none;
+}
+
 /* Responsive Styles */
 @media (max-width: 992px) {
     body {
@@ -707,6 +712,89 @@ input:checked + .slider:before {
     
     .preview-panel {
         position: static;
+    }
+    
+    /* Mobile tabs container - sticky at the top of viewport */
+    .mobile-tabs-container {
+        display: block;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background-color: rgba(11, 20, 26, 0.85);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        padding: 0.75rem 0;
+        margin-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .mobile-tabs {
+        display: flex;
+        gap: 0.5rem;
+        background-color: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border-color);
+        padding: 4px;
+        border-radius: var(--border-radius-md);
+        width: 100%;
+    }
+    
+    .mobile-tab {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background: none;
+        border: none;
+        padding: 10px;
+        color: var(--text-secondary);
+        font-family: var(--font-ui);
+        font-size: 0.88rem;
+        font-weight: 500;
+        cursor: pointer;
+        border-radius: var(--border-radius-sm);
+        transition: var(--transition-smooth);
+    }
+    
+    .mobile-tab i {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .mobile-tab.active {
+        color: #0b141a;
+        background-color: var(--primary);
+        font-weight: 600;
+    }
+    
+    .mobile-tab:not(.active):hover {
+        color: var(--text-primary);
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Utility class to hide panel on mobile */
+    .mobile-hidden {
+        display: none !important;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 0.5rem;
+    }
+    
+    .card, .preview-card, .whatsapp-mock-card, .action-card {
+        padding: 1rem;
+        border-radius: var(--border-radius-md);
+    }
+    
+    .wa-chat-area {
+        padding: 1rem 0.75rem;
+        min-height: 180px;
+    }
+    
+    .wa-bubble {
+        max-width: 90%;
     }
 }
 
