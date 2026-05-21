@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
         jobDescription: document.getElementById('jobDescription'),
         location: document.getElementById('location'),
         eventDate: document.getElementById('eventDate'),
+        eventDateFrom: document.getElementById('eventDateFrom'),
+        eventDateTo: document.getElementById('eventDateTo'),
         eventTime: document.getElementById('eventTime'),
         additionalInfo: document.getElementById('additionalInfo'),
         whatsappNumber: document.getElementById('whatsappNumber')
@@ -119,6 +121,86 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Helper: Formats Date Range to natural language
+    function formatDateRange(fromStr, toStr) {
+        if (!fromStr && !toStr) return "";
+        if (fromStr && !toStr) return `starting from *${formatDateFriendly(fromStr)}*`;
+        if (!fromStr && toStr) return `until *${formatDateFriendly(toStr)}*`;
+
+        const fromDate = new Date(fromStr + 'T00:00:00');
+        const toDate = new Date(toStr + 'T00:00:00');
+
+        if (isNaN(fromDate) || isNaN(toDate)) {
+            return `from *${fromStr}* to *${toStr}*`;
+        }
+
+        if (fromStr === toStr) {
+            return `on *${formatDateFriendly(fromStr)}*`;
+        }
+
+        const fromYear = fromDate.getFullYear();
+        const toYear = toDate.getFullYear();
+        const fromMonth = fromDate.getMonth();
+        const toMonth = toDate.getMonth();
+        const fromDay = fromDate.getDate();
+        const toDay = toDate.getDate();
+
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        if (fromMonth === toMonth && fromYear === toYear) {
+            return `from *${monthNames[fromMonth]} ${fromDay} to ${toDay}, ${fromYear}*`;
+        }
+
+        if (fromYear === toYear) {
+            return `from *${monthNames[fromMonth]} ${fromDay}* to *${monthNames[toMonth]} ${toDay}, ${fromYear}*`;
+        }
+
+        return `from *${monthNames[fromMonth]} ${fromDay}, ${fromYear}* to *${monthNames[toMonth]} ${toDay}, ${toYear}*`;
+    }
+
+    // Helper: Formats Multiple Dates to natural list
+    function formatMultipleDates(dateStrings) {
+        const validDates = dateStrings
+            .filter(d => d.trim() !== "")
+            .map(d => new Date(d + 'T00:00:00'))
+            .filter(d => !isNaN(d));
+
+        if (validDates.length === 0) return "";
+        
+        if (validDates.length === 1) {
+            return `on *${formatDateFriendly(dateStrings[0])}*`;
+        }
+
+        validDates.sort((a, b) => a - b);
+
+        const years = validDates.map(d => d.getFullYear());
+        const allSameYear = years.every(y => y === years[0]);
+        const targetYear = years[0];
+
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        const formattedParts = validDates.map(d => {
+            if (allSameYear) {
+                return `${monthNames[d.getMonth()]} ${d.getDate()}`;
+            } else {
+                return `${monthNames[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+            }
+        });
+
+        let listStr = "";
+        if (formattedParts.length === 2) {
+            listStr = `${formattedParts[0]} and ${formattedParts[1]}`;
+        } else {
+            listStr = formattedParts.slice(0, -1).join(', ') + `, and ${formattedParts[formattedParts.length - 1]}`;
+        }
+
+        if (allSameYear) {
+            listStr += `, ${targetYear}`;
+        }
+
+        return `on the following dates: *${listStr}*`;
+    }
+
     // Helper: Clean & validate phone number
     function cleanPhoneNumber(phone) {
         return phone.replace(/[^\d]/g, ''); // Keep only digits
@@ -135,16 +217,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleToggleState(fieldName) {
         const toggle = toggles[fieldName];
         const group = groups[fieldName];
-        const input = fields[fieldName];
 
         if (toggle.checked) {
             group.classList.remove('field-disabled');
-            if (input) input.removeAttribute('disabled');
-            group.querySelectorAll('input[type="radio"]').forEach(r => r.removeAttribute('disabled'));
+            group.querySelectorAll('input, textarea, button, select').forEach(el => {
+                if (el !== toggle) {
+                    el.removeAttribute('disabled');
+                }
+            });
         } else {
             group.classList.add('field-disabled');
-            if (input) input.setAttribute('disabled', 'true');
-            group.querySelectorAll('input[type="radio"]').forEach(r => r.setAttribute('disabled', 'true'));
+            group.querySelectorAll('input, textarea, button, select').forEach(el => {
+                if (el !== toggle) {
+                    el.setAttribute('disabled', 'true');
+                }
+            });
             // Remove validation errors if disabled
             group.classList.remove('has-error');
         }
@@ -156,10 +243,114 @@ document.addEventListener('DOMContentLoaded', () => {
         toggles[key].addEventListener('change', () => handleToggleState(key));
     });
 
+    // Date System Selectors & State
+    const datePanelSingle = document.getElementById('date-panel-single');
+    const datePanelRange = document.getElementById('date-panel-range');
+    const datePanelMultiple = document.getElementById('date-panel-multiple');
+    const multipleDatesList = document.getElementById('multiple-dates-list');
+    const btnAddDate = document.getElementById('btn-add-date');
+
+    // Switch date subpanels visibility based on selected radio
+    function updateDatePanelsVisibility() {
+        const activeDateType = document.querySelector('input[name="dateType"]:checked')?.value || 'single';
+        
+        datePanelSingle.classList.add('d-none');
+        datePanelRange.classList.add('d-none');
+        datePanelMultiple.classList.add('d-none');
+
+        if (activeDateType === 'single') {
+            datePanelSingle.classList.remove('d-none');
+        } else if (activeDateType === 'range') {
+            datePanelRange.classList.remove('d-none');
+        } else if (activeDateType === 'multiple') {
+            datePanelMultiple.classList.remove('d-none');
+        }
+        generateAnnouncement();
+    }
+
+    // Connect date type radios to view switcher
+    document.querySelectorAll('input[name="dateType"]').forEach(radio => {
+        radio.addEventListener('change', updateDatePanelsVisibility);
+    });
+
+    // Handle dynamic multiple date rows
+    function addMultipleDateRow(value = "") {
+        const row = document.createElement('div');
+        row.className = 'multiple-date-row';
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'input-wrapper';
+
+        const icon = document.createElement('i');
+        icon.className = 'input-icon';
+        icon.setAttribute('data-lucide', 'calendar');
+
+        const input = document.createElement('input');
+        input.type = 'date';
+        input.className = 'multiple-date-input';
+        input.value = value || new Date().toISOString().split('T')[0];
+
+        // Disable if main date toggle is off
+        if (!toggles.eventDate.checked) {
+            input.setAttribute('disabled', 'true');
+        }
+
+        wrapper.appendChild(icon);
+        wrapper.appendChild(input);
+        row.appendChild(wrapper);
+
+        // Delete button
+        const delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.className = 'btn-delete-date';
+        delBtn.title = 'Remove Date';
+        if (!toggles.eventDate.checked) {
+            delBtn.setAttribute('disabled', 'true');
+        }
+
+        const delIcon = document.createElement('i');
+        delIcon.setAttribute('data-lucide', 'trash-2');
+        delBtn.appendChild(delIcon);
+        row.appendChild(delBtn);
+
+        multipleDatesList.appendChild(row);
+
+        // Render Lucide icons for new elements
+        lucide.createIcons();
+
+        // Listeners for dynamic inputs
+        input.addEventListener('input', generateAnnouncement);
+        input.addEventListener('change', generateAnnouncement);
+
+        delBtn.addEventListener('click', () => {
+            row.remove();
+            generateAnnouncement();
+        });
+
+        generateAnnouncement();
+    }
+
+    // Add row click listener
+    btnAddDate.addEventListener('click', () => {
+        addMultipleDateRow();
+    });
+
+    // Initialize list with one row on load
+    addMultipleDateRow(today);
+
+    // Set default range dates
+    fields.eventDateFrom.value = today;
+    fields.eventDateTo.value = today;
+
+    // Run visibility toggle initially
+    updateDatePanelsVisibility();
+
     // Connect all inputs to live update listeners
     Object.keys(fields).forEach(key => {
-        fields[key].addEventListener('input', generateAnnouncement);
-        fields[key].addEventListener('change', generateAnnouncement);
+        if (fields[key]) {
+            fields[key].addEventListener('input', generateAnnouncement);
+            fields[key].addEventListener('change', generateAnnouncement);
+        }
     });
 
     // Connect radio buttons to live update listeners
@@ -285,11 +476,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Logistics Paragraph (Location, Date, Time)
         const locationVal = fields.location.value.trim();
+        const activeDateType = document.querySelector('input[name="dateType"]:checked')?.value || 'single';
         const dateVal = fields.eventDate.value;
-        const timeVal = fields.eventTime.value;
+        const dateFromVal = fields.eventDateFrom.value;
+        const dateToVal = fields.eventDateTo.value;
+        
+        const multipleDatesInputs = document.querySelectorAll('.multiple-date-input');
+        const multipleDatesVals = Array.from(multipleDatesInputs).map(inp => inp.value);
 
         const hasLocation = toggles.location.checked && locationVal;
-        const hasDate = toggles.eventDate.checked && dateVal;
+        
+        let hasDate = false;
+        let datePhrase = "";
+
+        if (toggles.eventDate.checked) {
+            if (activeDateType === 'single' && dateVal) {
+                hasDate = true;
+                datePhrase = `on *${formatDateFriendly(dateVal)}*`;
+            } else if (activeDateType === 'range' && (dateFromVal || dateToVal)) {
+                hasDate = true;
+                datePhrase = formatDateRange(dateFromVal, dateToVal);
+            } else if (activeDateType === 'multiple') {
+                const formattedMulti = formatMultipleDates(multipleDatesVals);
+                if (formattedMulti) {
+                    hasDate = true;
+                    datePhrase = formattedMulti;
+                }
+            }
+        }
+
+        const timeVal = fields.eventTime.value;
         const hasTime = toggles.eventTime.checked && timeVal;
 
         if (hasLocation || hasDate || hasTime) {
@@ -301,8 +517,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 logisticsParagraph += "the venue";
             }
 
-            if (hasDate) {
-                logisticsParagraph += ` on *${formatDateFriendly(dateVal)}*`;
+            if (hasDate && datePhrase) {
+                logisticsParagraph += ` ${datePhrase}`;
             }
 
             if (hasTime) {

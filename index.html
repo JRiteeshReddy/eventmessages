@@ -157,35 +157,77 @@
                                 </div>
                             </div>
 
-                            <div class="form-row">
-                                <!-- Date -->
-                                <div class="form-group" id="group-eventDate">
-                                    <div class="label-row">
-                                        <label for="eventDate">Date</label>
-                                        <label class="switch">
-                                            <input type="checkbox" id="toggle-eventDate" checked>
-                                            <span class="slider"></span>
-                                        </label>
-                                    </div>
-                                    <div class="input-wrapper">
-                                        <i data-lucide="calendar" class="input-icon"></i>
-                                        <input type="date" id="eventDate">
+                            <!-- Date Selection -->
+                            <div class="form-group" id="group-eventDate">
+                                <div class="label-row">
+                                    <label>Event Date</label>
+                                    <label class="switch">
+                                        <input type="checkbox" id="toggle-eventDate" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                
+                                <div class="segmented-control-wrapper date-selector-margin">
+                                    <div class="segmented-control">
+                                        <input type="radio" id="datetype-single" name="dateType" value="single" checked>
+                                        <label for="datetype-single">Single Date</label>
+                                        
+                                        <input type="radio" id="datetype-range" name="dateType" value="range">
+                                        <label for="datetype-range">Date Range</label>
+                                        
+                                        <input type="radio" id="datetype-multiple" name="dateType" value="multiple">
+                                        <label for="datetype-multiple">Multiple Dates</label>
                                     </div>
                                 </div>
 
-                                <!-- Time -->
-                                <div class="form-group" id="group-eventTime">
-                                    <div class="label-row">
-                                        <label for="eventTime">Time</label>
-                                        <label class="switch">
-                                            <input type="checkbox" id="toggle-eventTime" checked>
-                                            <span class="slider"></span>
-                                        </label>
+                                <!-- Date pickers container -->
+                                <div class="date-pickers-container">
+                                    <!-- Single Date Subpanel -->
+                                    <div class="date-subpanel" id="date-panel-single">
+                                        <div class="input-wrapper">
+                                            <i data-lucide="calendar" class="input-icon"></i>
+                                            <input type="date" id="eventDate">
+                                        </div>
                                     </div>
-                                    <div class="input-wrapper">
-                                        <i data-lucide="clock" class="input-icon"></i>
-                                        <input type="time" id="eventTime">
+
+                                    <!-- Date Range Subpanel -->
+                                    <div class="date-subpanel d-none" id="date-panel-range">
+                                        <div class="form-row">
+                                            <div class="input-wrapper">
+                                                <i data-lucide="calendar" class="input-icon"></i>
+                                                <input type="date" id="eventDateFrom" placeholder="From">
+                                            </div>
+                                            <div class="input-wrapper">
+                                                <i data-lucide="calendar" class="input-icon"></i>
+                                                <input type="date" id="eventDateTo" placeholder="To">
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <!-- Multiple Dates Subpanel -->
+                                    <div class="date-subpanel d-none" id="date-panel-multiple">
+                                        <div id="multiple-dates-list" class="multiple-dates-list">
+                                            <!-- Dynamic items added here by app.js -->
+                                        </div>
+                                        <button type="button" class="btn btn-secondary btn-sm btn-full-width" id="btn-add-date">
+                                            <i data-lucide="plus"></i> Add Another Date
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Time Section -->
+                            <div class="form-group" id="group-eventTime">
+                                <div class="label-row">
+                                    <label for="eventTime">Time</label>
+                                    <label class="switch">
+                                        <input type="checkbox" id="toggle-eventTime" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="input-wrapper">
+                                    <i data-lucide="clock" class="input-icon"></i>
+                                    <input type="time" id="eventTime">
                                 </div>
                             </div>
                         </div>

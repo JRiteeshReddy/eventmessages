@@ -767,3 +767,56 @@ input:checked + .slider:before {
     pointer-events: none;
     opacity: 0.5;
 }
+
+/* Date Layout Utilities */
+.date-subpanel {
+    transition: var(--transition-smooth);
+}
+.d-none {
+    display: none !important;
+}
+.date-selector-margin {
+    margin-bottom: 12px;
+}
+.btn-full-width {
+    width: 100%;
+    margin-top: 8px;
+}
+.multiple-dates-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.multiple-date-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+}
+.multiple-date-row .input-wrapper {
+    flex-grow: 1;
+}
+.btn-delete-date {
+    background-color: var(--danger-bg);
+    border: 1px solid rgba(234, 0, 56, 0.2);
+    color: var(--danger);
+    padding: 10px;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition-smooth);
+    width: 42px;
+    height: 42px;
+}
+.btn-delete-date:hover {
+    background-color: var(--danger);
+    color: #fff;
+}
+.form-group.field-disabled .btn-full-width,
+.form-group.field-disabled .btn-delete-date {
+    pointer-events: none;
+    opacity: 0.5;
+}
